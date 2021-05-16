@@ -8,6 +8,10 @@ app.use(bodyParser());
 require('./routes/routes')
 const router = require('./routes/router')
 
+const dotenv = require('dotenv')
+dotenv.config()
+
+
 const initDB = require("./database");
 initDB();
 
