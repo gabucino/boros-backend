@@ -1,29 +1,32 @@
 "use strict";
 
 const Koa = require("koa");
-const Router = require("@koa/router");
-
-const initDB = require('./database'); 
-initDB(); 
-
+const bodyParser = require('koa-bodyparser');
 const app = new Koa();
-const router = new Router();
+app.use(bodyParser());
+
+require('./routes/routes')
+const router = require('./routes/router')
+
+const initDB = require("./database");
+initDB();
+
 
 
 app.use(async (ctx, next) => {
-    try {
-      await next()
-    } catch(err) {
-      console.log(err.status)
-      ctx.status = err.status || 500;
-      ctx.body = err.message;
-    }
-  });
-
-router.get("koa-example", "/", (ctx) => {
-  ctx.body = "Hello World";
+  try {
+    await next();
+  } catch (err) {
+    console.log(err.status);
+    ctx.status = err.status || 500;
+    ctx.body = err.message;
+  }
 });
 
-app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(1234);
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods());
+
+app.listen(8800);

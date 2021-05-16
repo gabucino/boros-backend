@@ -11,3 +11,4 @@ const initDB = () => {
   mongoose.connection.on('error', console.error); 
 } 
 module.exports = initDB;
+
