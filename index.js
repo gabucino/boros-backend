@@ -21,8 +21,9 @@ app.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
-    console.log(err.status);
-    ctx.status = err.status || 500;
+    console.log(err)
+    console.log(err.statusCode);
+    ctx.statusCode = err.statusCode || 500;
     ctx.body = err.message;
   }
 });

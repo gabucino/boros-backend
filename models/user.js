@@ -43,6 +43,18 @@ const userSchema = new Schema(
       default: "user",
     },
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
+    basket: [
+      {
+        product: { type: Schema.Types.ObjectId, ref: "Product" },
+        qty: {
+          type: Number,
+          default: 1,
+        },
+      },
+    ],
+    basketTotal: {
+      type: Number,
+    },
     lastActive: { type: Date },
     contactInfo: ContactInfoSchema,
   },
