@@ -5,6 +5,8 @@ exports.addToBasket = async ctx => {
 
   const result = await orderService.addToDBBasket(userId, productId)
 
+  console.log("result is:", result)
+
   if (result.statusCode) throw result
   else ctx.body = {
       basket: result
@@ -28,11 +30,14 @@ exports.createOrder = async ctx => {
   const {data} = ctx.request.body
 
   const result = await orderService.createOrder(data)
+  if (result.statusCode) throw result
+
+  const emptyBasket = await orderService.clearBasket(data.userId)
+  if (emptyBasket.statusCode) throw result
 
   //send email
 
-  if (result.statusCode) throw result
-  else ctx.body = {
+  ctx.body = {
       order: result
   }
 }

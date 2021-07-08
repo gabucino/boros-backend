@@ -5,20 +5,22 @@ const ObjectId = require("mongodb").ObjectID;
 const calculateTotal = (basket) => {
   let total = 0;
 
-  console.log(basket)
+  console.log(basket);
 
   for (let product of basket) {
     total = total + product.product.price * product.qty;
   }
-  console.log('Total calculated: ', total)
+  console.log("Total calculated: ", total);
   return total;
 };
 
 exports.addToDBBasket = async (userId, productId) => {
   try {
+    console.log('service stuff')
     let user = await User.findById(userId);
 
-    const existingItem = user.basket.find(
+    console.log('service stuff 2')
+    const existingItem = await user.basket.find(
       (item) => item.product.toString() === productId.toString()
     );
 
@@ -103,18 +105,13 @@ exports.createOrder = async (data) => {
 
     let total = calculateTotal(user.basket);
 
-    console.log(data.total)
-    console.log(total)
-  
     if (data.total != total) {
       const error = new Error("Something went wrong, please refresh the page");
       error.statusCode = 500;
       return error;
     }
 
-    console.log(user.basket)
-  
-    const newOrder =  new Order({
+    const newOrder = new Order({
       user: Object(data.userId),
       total: total,
       products: user.basket,
@@ -123,13 +120,32 @@ exports.createOrder = async (data) => {
         ? data.billingAddress
         : data.deliveryAddress,
     });
-  
+
     const order = await newOrder.save();
-  
+    user.orders.push(order._id);
+   await user.save();
+
     return order;
   } catch (error) {
     if (!error.statusCode) error.statusCode = 500;
     return error;
   }
+};
 
+exports.clearBasket = async (userId) => {
+  try {
+    await User.updateOne(
+      { _id: userId },
+      {
+        $set: {
+          basket: [],
+        },
+      }
+    );
+
+    return true;
+  } catch (error) {
+    if (!error.statusCode) error.statusCode = 500;
+    return error;
+  }
 };

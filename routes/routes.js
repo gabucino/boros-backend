@@ -1,6 +1,7 @@
 const router = require('./router')
 
-const validate = require('../validations/user')
+const validate = require('../middleware/validations')
+const auth = require('../middleware/auth')
 
 const userController = require('../controllers/user')
 const productController = require('../controllers/product')
@@ -16,6 +17,6 @@ router.post('/product/new', productController.createProduct);
 
 
 //Order
-router.post('/order/add_to_basket', orderController.addToBasket)
+router.post('/order/add_to_basket', auth.authenticateToken, orderController.addToBasket)
 router.post('/order/remove_from_basket', orderController.removeFromBasket)
 router.post('/order/new', orderController.createOrder)

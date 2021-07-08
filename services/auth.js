@@ -1,13 +1,13 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
-
-const myError = (message, statusCode) => {
-  const error = new Error(message)
-  error.statusCode = statusCode
-  throw error
-}
+exports.myError = (message, statusCode) => {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  console.log('error happening here')
+  throw error;
+};
 
 exports.checkForExistingUser = async (email) => {
   console.log(email, "terersdsfs");
@@ -21,11 +21,11 @@ exports.signToken = (user) => {
   return jwt.sign(
     {
       iss: "boros",
-      sub: user._id,
+      sub: user._id.toString(),
       iat: new Date().getTime(),
       exp: new Date().setDate(new Date().getDate() + 1), //plus one day
     },
-    process.env.JSONSECRET
+    process.env.ACCESS_TOKEN_SECRET
   );
 };
 
@@ -39,15 +39,13 @@ exports.authUser = async (email, pw) => {
     }
     const isPwMatch = await bcrypt.compare(pw, user.pw);
 
-    
-
     if (isPwMatch) return user;
     else {
       const error = new Error("Invalid email or password.");
       error.statusCode = 401;
       return error;
     }
-  } catch (err) {
+  } catch (err) {pth
     console.log(err);
   }
 };
