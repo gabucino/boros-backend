@@ -15,7 +15,11 @@ exports.addToBasket = async ctx => {
 
 
 exports.removeFromBasket = async ctx => {
-  const { userId, productId } = ctx.request.body;
+  const { userId, productId } = ctx.params
+
+  console.log(ctx.query)
+
+  console.log(userId, productId)
 
   const result = await orderService.removeFromBasket(userId, productId)
 

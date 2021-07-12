@@ -17,7 +17,7 @@ exports.checkForExistingUser = async (email) => {
   return false;
 };
 
-exports.signToken = (user) => {
+exports.generateAccessToken = (user) => {
   return jwt.sign(
     {
       iss: "boros",

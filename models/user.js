@@ -57,6 +57,7 @@ const userSchema = new Schema(
     },
     lastActive: { type: Date },
     contactInfo: ContactInfoSchema,
+    // refreshToken: [{type: String}]
   },
   { timestamps: true }
 );

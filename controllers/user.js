@@ -29,11 +29,13 @@ exports.login = async (ctx) => {
 
   if (authResult.statusCode) throw authResult;
   else {
-    const token = authService.signToken(authResult);
+    const accessToken = authService.generateAccessToken(authResult);
+    const refreshToken = jwt.sign(authResult._id, process.env.REFRESH_TOKEN_SECRET)
 
     ctx.body = {
       user: authResult,
-      token: token
+      accessToken: accessToken,
+      refreshToken: refreshToken
     }
   }
 };

@@ -17,6 +17,6 @@ router.post('/product/new', productController.createProduct);
 
 
 //Order
-router.post('/order/add_to_basket', auth.authenticateToken, orderController.addToBasket)
-router.post('/order/remove_from_basket', orderController.removeFromBasket)
-router.post('/order/new', orderController.createOrder)
+router.put('/order/add_to_basket', auth.authenticateToken, orderController.addToBasket)
+router.delete('/order/remove_from_basket/:userId/:productId', auth.authenticateToken, orderController.removeFromBasket)
+router.post('/order/new', auth.authenticateToken, orderController.createOrder)
